@@ -1,1 +1,3 @@
-Item = Struct.new(:product_code, :name, :price)
+module ItemCheckout
+  Item = Struct.new(:product_code, :name, :price)
+end

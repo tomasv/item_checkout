@@ -1,12 +1,12 @@
 require 'spec_helper'
 require 'item_checkout'
 
-describe Checkout do
+describe ItemCheckout::Checkout do
   let(:pricing_rules) { [] }
-  let(:checkout) { Checkout.new(pricing_rules) }
-  let(:apple) { Item.new('A1', 'Apple', 5.0) }
-  let(:pear) { Item.new('P1', 'Pear', 4.0) }
-  let(:grape) { Item.new('G1', 'Grape', 3.0) }
+  let(:checkout) { ItemCheckout::Checkout.new(pricing_rules) }
+  let(:apple) { ItemCheckout::Item.new('A1', 'Apple', 5.0) }
+  let(:pear) { ItemCheckout::Item.new('P1', 'Pear', 4.0) }
+  let(:grape) { ItemCheckout::Item.new('G1', 'Grape', 3.0) }
 
   it 'is at 0 sum at first' do
     checkout.total.should == 0.0
@@ -25,7 +25,7 @@ describe Checkout do
   end
 
   context 'with buy one get one free rule' do
-    let(:checkout) { Checkout.new([BuyOneGetOne.new(apple)]) }
+    let(:checkout) { ItemCheckout::Checkout.new([ItemCheckout::BuyOneGetOne.new(apple)]) }
 
     it 'gives one apple free for 1 bought' do
       checkout.scan(apple)
@@ -40,7 +40,7 @@ describe Checkout do
   end
 
   context 'with bulk discount' do
-    let(:checkout) { Checkout.new([BulkDiscount.new(apple, 3, 4.0)]) }
+    let(:checkout) { ItemCheckout::Checkout.new([ItemCheckout::BulkDiscount.new(apple, 3, 4.0)]) }
 
     it 'does not discount if discount quantity is not reached' do
       checkout.scan(apple)
@@ -55,14 +55,14 @@ describe Checkout do
   end
 
   describe 'reference requirements' do
-    let(:green_tea) { Item.new('GR1', 'Green tea', 3.11) }
-    let(:strawberries) { Item.new('SR1', 'Strawberries', 5.00) }
-    let(:coffee) { Item.new('CF1', 'Coffee', 11.23) }
+    let(:green_tea) { ItemCheckout::Item.new('GR1', 'Green tea', 3.11) }
+    let(:strawberries) { ItemCheckout::Item.new('SR1', 'Strawberries', 5.00) }
+    let(:coffee) { ItemCheckout::Item.new('CF1', 'Coffee', 11.23) }
 
     let(:pricing_rules) {
       [
-        BuyOneGetOne.new(green_tea),
-        BulkDiscount.new(strawberries, 3, 4.50)
+        ItemCheckout::BuyOneGetOne.new(green_tea),
+        ItemCheckout::BulkDiscount.new(strawberries, 3, 4.50)
       ]
     }
 
