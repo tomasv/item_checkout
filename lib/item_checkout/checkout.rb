@@ -11,7 +11,7 @@ module ItemCheckout
 
     def total
       total_without_discounts = @items.inject(0) { |sum, item| sum + item.price }
-      discounts = @pricing_rules.map { |rule| rule.apply(@items) }
+      discounts = @pricing_rules.map { |rule| rule.discount_for(@items) }
       discount_sum = discounts.inject(0, &:+)
       total_without_discounts - discount_sum
     end

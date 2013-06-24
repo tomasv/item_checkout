@@ -7,7 +7,7 @@ module ItemCheckout
         @new_price = new_price
       end
 
-      def apply(items)
+      def discount_for(items)
         offer_items = items.select { |item| item == @offer_item }
 
         if offer_items.size >= @quantity

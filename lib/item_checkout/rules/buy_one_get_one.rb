@@ -5,7 +5,7 @@ module ItemCheckout
         @offer_item = item
       end
 
-      def apply(items)
+      def discount_for(items)
         offer_items = items.select { |item| item == @offer_item }
         discountable_count = offer_items.size / 2
         @offer_item.price * discountable_count
