@@ -2,11 +2,19 @@ require 'spec_helper'
 require 'item_checkout'
 
 describe ItemCheckout::Checkout do
+  def new_item(*args)
+    ItemCheckout::Item.new(*args)
+  end
+
+  def new_checkout(*args)
+    ItemCheckout::Checkout.new(*args)
+  end
+
   let(:pricing_rules) { [] }
-  let(:checkout) { ItemCheckout::Checkout.new(pricing_rules) }
-  let(:apple) { ItemCheckout::Item.new('A1', 'Apple', 5.0) }
-  let(:pear) { ItemCheckout::Item.new('P1', 'Pear', 4.0) }
-  let(:grape) { ItemCheckout::Item.new('G1', 'Grape', 3.0) }
+  let(:checkout) { new_checkout(pricing_rules) }
+  let(:apple) { new_item('A1', 'Apple', 5.0) }
+  let(:pear) { new_item('P1', 'Pear', 4.0) }
+  let(:grape) { new_item('G1', 'Grape', 3.0) }
 
   it 'is at 0 sum at first' do
     checkout.total.should == 0.0
@@ -25,7 +33,7 @@ describe ItemCheckout::Checkout do
   end
 
   context 'with buy one get one free rule' do
-    let(:checkout) { ItemCheckout::Checkout.new([ItemCheckout::BuyOneGetOne.new(apple)]) }
+    let(:checkout) { new_checkout([ItemCheckout::BuyOneGetOne.new(apple)]) }
 
     it 'gives one apple free for 1 bought' do
       checkout.scan(apple)
@@ -40,7 +48,7 @@ describe ItemCheckout::Checkout do
   end
 
   context 'with bulk discount' do
-    let(:checkout) { ItemCheckout::Checkout.new([ItemCheckout::BulkDiscount.new(apple, 3, 4.0)]) }
+    let(:checkout) { new_checkout([ItemCheckout::BulkDiscount.new(apple, 3, 4.0)]) }
 
     it 'does not discount if discount quantity is not reached' do
       checkout.scan(apple)
@@ -55,9 +63,9 @@ describe ItemCheckout::Checkout do
   end
 
   describe 'reference requirements' do
-    let(:green_tea) { ItemCheckout::Item.new('GR1', 'Green tea', 3.11) }
-    let(:strawberries) { ItemCheckout::Item.new('SR1', 'Strawberries', 5.00) }
-    let(:coffee) { ItemCheckout::Item.new('CF1', 'Coffee', 11.23) }
+    let(:green_tea) { new_item('GR1', 'Green tea', 3.11) }
+    let(:strawberries) { new_item('SR1', 'Strawberries', 5.00) }
+    let(:coffee) { new_item('CF1', 'Coffee', 11.23) }
 
     let(:pricing_rules) {
       [
