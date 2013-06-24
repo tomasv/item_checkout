@@ -19,8 +19,22 @@ Or install it yourself as:
 
 ## Usage
 
-checkout = ItemCheckout::Checkout.new(pricing__rules)
-checkout.scan(item)
-checkout.scan(item)
-price = checkout.total # => 6.54
+    checkout = ItemCheckout::Checkout.new(pricing_rules)
+    checkout.scan(item)
+    checkout.scan(item)
+    price = checkout.total # => 6.54
 
+Where pricing\_rules is an array of rule objects.
+A rule object must respond to discount\_for and return the total discount for the passed in
+item array.
+Example rule object:
+
+    class HalfPrice
+      def discount_for(items)
+		items.map { |item| item.price / 2 }.inject(0, &:+)
+      end
+    end
+
+Items should implement price and product\_code methods.
+
+Discounts are applied upon invoking the total method on the checkout.
