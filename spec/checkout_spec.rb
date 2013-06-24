@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'checkout'
+require 'item_checkout'
 
 describe Checkout do
   let(:pricing_rules) { [] }
