@@ -10,6 +10,14 @@ describe ItemCheckout::Checkout do
     ItemCheckout::Checkout.new(*args)
   end
 
+  def new_buy_one_get_one(*args)
+    ItemCheckout::Rules::BuyOneGetOne.new(*args)
+  end
+
+  def new_bulk_discount(*args)
+    ItemCheckout::Rules::BulkDiscount.new(*args)
+  end
+
   let(:pricing_rules) { [] }
   let(:checkout) { new_checkout(pricing_rules) }
   let(:apple) { new_item('A1', 'Apple', 5.0) }
@@ -33,7 +41,7 @@ describe ItemCheckout::Checkout do
   end
 
   context 'with buy one get one free rule' do
-    let(:checkout) { new_checkout([ItemCheckout::BuyOneGetOne.new(apple)]) }
+    let(:checkout) { new_checkout([new_buy_one_get_one(apple)]) }
 
     it 'gives one apple free for 1 bought' do
       checkout.scan(apple)
@@ -48,7 +56,7 @@ describe ItemCheckout::Checkout do
   end
 
   context 'with bulk discount' do
-    let(:checkout) { new_checkout([ItemCheckout::BulkDiscount.new(apple, 3, 4.0)]) }
+    let(:checkout) { new_checkout([new_bulk_discount(apple, 3, 4.0)]) }
 
     it 'does not discount if discount quantity is not reached' do
       checkout.scan(apple)
@@ -69,8 +77,8 @@ describe ItemCheckout::Checkout do
 
     let(:pricing_rules) {
       [
-        ItemCheckout::BuyOneGetOne.new(green_tea),
-        ItemCheckout::BulkDiscount.new(strawberries, 3, 4.50)
+        new_buy_one_get_one(green_tea),
+        new_bulk_discount(strawberries, 3, 4.50)
       ]
     }
 
